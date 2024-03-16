@@ -1,0 +1,8 @@
+intents:
+  - name: Beenden
+    utterances:
+      - Auf Wiedersehen
+      - Tschüss
+      - Beenden
+      - Gute Nacht
+    action: exit

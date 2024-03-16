@@ -1,0 +1,11 @@
+intents:
+  - name: PlayMusic
+    utterances:
+      - Musik abspielen
+      - Spiel Musik
+    action: play_music
+  - name: StopMusic
+    utterances:
+      - Musik stoppen
+      - Stoppe die Musik
+    action: stop_music
