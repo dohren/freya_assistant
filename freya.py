@@ -1,8 +1,6 @@
 from wakeword import WakewordDetection
 from google_speech_recognition import GoogleSpeechRecognition
-#from logging import configure_logging
-from skills.light_control import LightControlSkill
-from skills.music_control import MusicControlSkill
+#from logging import configure_loggingls -l
 from intent_handler import IntentHandler
 from openai_tts import OpenaiTTS
 import os

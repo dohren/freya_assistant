@@ -8,9 +8,9 @@ class GoogleSpeechRecognition:
         
     def recognize_speech(self):    
         with self.speech as source:
-            print("Sprechen Sie jetzt...")
             audio = self.recognizer.adjust_for_ambient_noise(source)
             playsound.playsound('resources/ping.mp3', True) 
+            print("Sprechen Sie jetzt...")
             audio = self.recognizer.listen(source)
 
         try:
