@@ -1,5 +1,5 @@
-from wakeword import WakewordDetection
 from google_speech_recognition import GoogleSpeechRecognition
+from wakeword import WakewordDetection
 #from logging import configure_loggingls -l
 from intent_handler import IntentHandler
 from openai_tts import OpenaiTTS
@@ -11,10 +11,11 @@ def main():
     model_path = 'resources/porcupine_params_de.pv'
     #configure_logging()
 
+    
     wakeword_detector = WakewordDetection(keywords, keyword_paths, model_path)
-    wakeword_detector.setup()
-    intent_handler = IntentHandler("skills")
     speech_recognizer = GoogleSpeechRecognition()
+    intent_handler = IntentHandler("skills")
+
     openaiTTS = OpenaiTTS()
 
     while True:
