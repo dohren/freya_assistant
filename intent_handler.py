@@ -36,7 +36,6 @@ class IntentHandler:
             for intent in skill.intents:
                 cleaned_utterance = utterance.lower().strip() 
                 if cleaned_utterance in [u.lower().strip() for u in intent['utterances']]:
-                    # Führe die entsprechende Aktion aus
                     action = intent['action']
                     response = skill.execute_skill()
                     return True, response, action

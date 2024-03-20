@@ -1,6 +1,6 @@
 from google_stt import GoogleSpeechRecognition
 from wakeword import WakewordDetection
-#from logging import configure_loggingls -l
+#from logging import configure_logging
 from intent_handler import IntentHandler
 from openai_tts import OpenaiTTS
 
@@ -37,7 +37,7 @@ def main():
                     break
 
     wakeword_detection.stop()
-    
+
 if __name__ == "__main__":
     main()
 

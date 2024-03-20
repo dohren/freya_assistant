@@ -1,0 +1,6 @@
+intents:
+  - name: Uhrzeit
+    utterances:
+      - Wie viel Uhr ist es
+      - Wie spät ist es
+    action: get_time

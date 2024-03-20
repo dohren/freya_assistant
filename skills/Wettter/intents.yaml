@@ -1,0 +1,6 @@
+intents:
+  - name: Wetter
+    utterances:
+      - Wie wird das Wetter heute
+      - Wieviel Grad sind es
+    action: get_weather
