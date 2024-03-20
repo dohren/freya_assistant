@@ -21,6 +21,8 @@ def main():
 
     utterance = None
     
+    openaiTTS.synthesize_speech("Hi, ich bin Frehja. Wie kann ich dir helfen?")
+
     while True:
             if wakeword_detection.wake_word_detected.is_set():
                 utterance = speech_recognizer.recognize_speech()

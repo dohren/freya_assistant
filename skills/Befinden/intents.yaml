@@ -1,0 +1,6 @@
+intents:
+  - name: Befinden
+    utterances:
+      - Wie gehts
+      - Wie geht es dir
+    action: how_are_you
