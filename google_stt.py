@@ -10,7 +10,6 @@ class GoogleSpeechRecognition:
         with self.microhpone as source: 
             audio = self.recognizer.adjust_for_ambient_noise(source)
             playsound.playsound('resources/ping.mp3', True) 
-            print("Sprechen Sie jetzt...")
             audio = self.recognizer.listen(source)
         try:
             print("Transkription: ", self.recognizer.recognize_google(audio, language="de-DE"))
