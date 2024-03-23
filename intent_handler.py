@@ -3,6 +3,7 @@
 import os
 import yaml
 import importlib.util
+import re
 
 class IntentHandler:
     def __init__(self, skill_package_path):
@@ -31,22 +32,52 @@ class IntentHandler:
                 skill_module.intents = intents
                 self.skills.append(skill_module)
 
-    def handle_intent(self, utterance):
+    def handle_intent(self, recognized_text):
+        variables = {}
         for skill in self.skills:
             for intent in skill.intents:
-                cleaned_utterance = utterance.lower().strip() 
-                if cleaned_utterance in [u.lower().strip() for u in intent['utterances']]:
-                    action = intent['action']
-                    response = skill.execute_skill()
-                    return True, response, action
+                cleaned_recognized_text = recognized_text.lower().strip()
+                for utterance in intent['utterances']:
+                    cleaned_utterance = utterance.lower().strip()
+                    if cleaned_recognized_text == cleaned_utterance:
+                        action = intent['action']
+                        response = skill.execute_skill(action, values)
+                        return True, response, action
+                    else:
+                        values = {}
+                        pattern = r'\{(.+?)\}' 
+                        replaced_variable = "^" + re.sub(pattern, r'(.+?)', cleaned_utterance + "$")
+                        variables = re.findall(pattern, cleaned_utterance)
+                        findings = re.findall(replaced_variable, cleaned_recognized_text)
+                        
+                        for find in findings:
+                            if isinstance(find, str):
+                                values[variables[0]] = find
+                            else:
+                                key_index = 0
+                                for item in find:
+                                    values[variables[key_index]] = item
+                                    key_index = key_index + 1
+                            action = intent['action']
+                            response = skill.execute_skill(action, values)
+                            return True, response, action
+
         return False, "", "not_found"
-        
+
 if __name__ == "__main__":
     skill_package_path = "skills"
     intent_handler = IntentHandler(skill_package_path)
 
-    utterance= "Schalte das Licht Aus"
+    utterance= "Spiele Musik"
     intent_handler.handle_intent(utterance)
 
-    utterance= "musik stoppen"
+    utterance= "Schalte das Licht im Wohnzimmer Aus"
     intent_handler.handle_intent(utterance)
+
+    utterance= "Schalte das Licht ganz aus"
+    intent_handler.handle_intent(utterance)
+
+    utterance= "Wie wird das Wetter heute"
+    success, response, action = intent_handler.handle_intent(utterance)
+
+    print(response)

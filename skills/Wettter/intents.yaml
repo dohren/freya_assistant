@@ -1,6 +1,6 @@
 intents:
   - name: Wetter
     utterances:
-      - Wie wird das Wetter heute
+      - Wie wird das Wetter {day}
       - Wieviel Grad sind es
     action: get_weather

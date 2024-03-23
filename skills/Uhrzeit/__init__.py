@@ -1,7 +1,7 @@
 
 from datetime import datetime
 
-def execute_skill():
+def execute_skill(action, values):
     now = datetime.now()
     current_hour = now.strftime("%H")
     current_minute = now.strftime("%M")

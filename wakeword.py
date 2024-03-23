@@ -58,3 +58,4 @@ if __name__ == "__main__":
     wakeword_detection.start()
     wakeword_detection.wake_word_detected.wait()  # Block until wake word is detected
     print("Wake word detected!")
+    wakeword_detection.stop()

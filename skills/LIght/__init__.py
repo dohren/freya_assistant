@@ -1,4 +1,4 @@
 
 
-def execute_skill():
+def execute_skill(action, values):
     return "Ich leuchte"

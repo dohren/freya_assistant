@@ -1,11 +1,7 @@
 intents:
-  - name: PlayMusic
+  - name: SwitchMusic
     utterances:
       - Musik abspielen
       - Spiel Musik
-    action: play_music
-  - name: StopMusic
-    utterances:
-      - Musik stoppen
-      - Stoppe die Musik
-    action: stop_music
+      - Schalte die Musik {state}
+    action: switch_music

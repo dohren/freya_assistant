@@ -1,12 +1,7 @@
 intents:
-  - name: TurnOnLight
+  - name: switchLight
     utterances:
-      - Licht einschalten
-      - Schalte das Licht an
-    action: turn_on_light
-
-  - name: TurnOffLight
-    utterances:
-      - Licht ausschalten
-      - Schalte das Licht aus
-    action: turn_off_light
+      - Schalte das Licht im {place} {state}
+      - Schalte das Licht {state}
+      - Schalte das {object} {state}
+    action: switch_light

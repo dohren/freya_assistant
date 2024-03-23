@@ -3,7 +3,8 @@ import requests
 from datetime import datetime
 import os
 
-def execute_skill():
+def execute_skill(action, values):
+    print(values)
     now = datetime.now()
     current_hour = now.strftime("%H")
     current_minute = now.strftime("%M")
@@ -24,4 +25,4 @@ def execute_skill():
         return f"{time_string} Die Wetterinformationen konnten nicht abgerufen werden."
 
 if __name__ == "__main__":
-    print(execute_skill())
+    print(execute_skill("", {}))
