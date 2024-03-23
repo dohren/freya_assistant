@@ -7,7 +7,6 @@ import threading
 
 class WakewordDetection(threading.Thread):
         
-    
     def __init__(self, keywords, keyword_paths, model_path):
         threading.Thread.__init__(self)
         self.wake_word_detected = threading.Event()

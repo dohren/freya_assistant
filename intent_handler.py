@@ -1,11 +1,12 @@
-# intent_handler.py
-
 import os
 import yaml
 import importlib.util
 import re
 
 class IntentHandler:
+
+    VARIABLE_PATTERN = pattern = r'\{(.+?)\}' 
+
     def __init__(self, skill_package_path):
         self.skills = []
         self.skills_dir = skill_package_path
@@ -20,38 +21,39 @@ class IntentHandler:
             intents_file = os.path.join(skills_path, skill_dir, 'intents.yaml')
 
             if os.path.isfile(init_file) and os.path.isfile(intents_file):
-                with open(intents_file, 'r') as file:
-                    intents_data = yaml.safe_load(file)
-                intents = intents_data.get('intents', [])
-
                 skill_module = importlib.util.module_from_spec(
                     importlib.util.spec_from_file_location(f"{self.skills_dir}.{skill_dir}", init_file))
                 importlib.util.spec_from_file_location(f"{self.skills_dir}.{skill_dir}", init_file).loader.exec_module(skill_module)
 
-                # Fügen Sie die Intents zur Skill-Modulinstanz hinzu
-                skill_module.intents = intents
+                with open(intents_file, 'r') as file:
+                    intents_data = yaml.safe_load(file)
+                    intents = intents_data.get('intents', [])
+                    for intent in intents:
+                        for utterance in intent["utterances"]:
+                            utterance = "^" + re.sub(self.VARIABLE_PATTERN, r'(.+?)', utterance + "$") 
+                    skill_module.intents = intents
+                
                 self.skills.append(skill_module)
 
     def handle_intent(self, recognized_text):
 
         for skill in self.skills:
             for intent in skill.intents:
-                cleaned_recognized_text = recognized_text.lower().strip()
                 for utterance in intent['utterances']:
+                    cleaned_recognized_text = recognized_text.lower().strip()
                     cleaned_utterance = utterance.lower().strip()
                     if cleaned_recognized_text == cleaned_utterance:
                         action = intent['action']
                         response = skill.execute_skill(action, {})
                         return True, response, action
                     
-                    values = {}
-                    variables = {}
-                    pattern = r'\{(.+?)\}' 
-                    replaced_variable = "^" + re.sub(pattern, r'(.+?)', cleaned_utterance + "$")
-                    variables = re.findall(pattern, cleaned_utterance)
-                    findings = re.findall(replaced_variable, cleaned_recognized_text)
+                    utterance_pattern = "^" + re.sub(self.VARIABLE_PATTERN, r'(.+?)', cleaned_utterance + "$")                    
+                    findings = re.findall(utterance_pattern, cleaned_recognized_text)
                     
                     for find in findings:
+                        values = {}
+                        variables = {}
+                        variables = re.findall(self.VARIABLE_PATTERN, cleaned_utterance)
                         if isinstance(find, str):
                             values[variables[0]] = find
                         else:
