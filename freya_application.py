@@ -3,6 +3,7 @@ from wakeword import WakewordDetection
 #from logging import configure_logging
 from intent_handler import IntentHandler
 from openai_tts import OpenaiTTS
+import subprocess
 
 
 def main():
@@ -42,4 +43,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+   # Erstellen Sie eine requirements.txt-Datei
+    with open("requirements.txt", "w") as f:
+        subprocess.call(["pip", "freeze"], stdout=f) 
+
 

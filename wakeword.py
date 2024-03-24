@@ -1,5 +1,4 @@
 import pvporcupine
-from pvrecorder import PvRecorder
 import os
 import struct
 import pyaudio
