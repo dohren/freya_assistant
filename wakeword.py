@@ -35,7 +35,6 @@ class WakewordDetection(threading.Thread):
             if keyword_index >= 0:
                 print(f"Detected {self.keywords[keyword_index]}")
                 self.wake_word_detected.set() 
-
         self.cleanup()
 
     def stop(self):

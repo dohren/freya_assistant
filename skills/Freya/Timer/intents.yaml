@@ -1,0 +1,5 @@
+intents:
+  - name: Stopuhr
+    utterances:
+      - Stelle mir {artikel} Timer auf {number} {unit}
+    action: timer

@@ -1,25 +1,27 @@
 from google_stt import GoogleSpeechRecognition
 from wakeword import WakewordDetection
-#from logging import configure_logging
 from intent_handler import IntentHandler
 from openai_tts import OpenaiTTS
-import subprocess
+from intent_response import IntentResponse
+import time
+import threading
 
+keywords = ["hey freya"]
+keyword_paths = ['resources/freya.ppn']
+model_path = 'resources/porcupine_params_de.pv'
+
+wakeword_detection = WakewordDetection(keywords, keyword_paths, model_path)
+speech_recognizer = GoogleSpeechRecognition()
+intent_handler = IntentHandler("skills")
+openai_tts = OpenaiTTS()
+
+result = []
+
+def handle_intent_thread(utterance):
+    result.append(intent_handler.handle_intent(utterance))
 
 def main():
-    keywords = ["hey freya"]
-    keyword_paths = ['resources/freya.ppn']
-    model_path = 'resources/porcupine_params_de.pv'
-    #configure_logging()
-
-    speech_recognizer = GoogleSpeechRecognition()
-    intent_handler = IntentHandler("skills")
-
-    openai_tts = OpenaiTTS()
-
-    wakeword_detection = WakewordDetection(keywords, keyword_paths, model_path)
     wakeword_detection.start()    
-
     openai_tts.synthesize_speech("Hi, ich bin Frehja. Wie kann ich dir helfen?")
 
     while True:
@@ -30,21 +32,24 @@ def main():
             wakeword_detection.wake_word_detected.clear()
 
         if utterance:
-            success, response, action = intent_handler.handle_intent(utterance)
-            if success:
-                openai_tts.synthesize_speech(response)
-            else:
+            thread = threading.Thread(target=handle_intent_thread, args=(utterance,))
+            thread.start()
+
+        if len(result) > 0:
+           current_result: IntentResponse = result.pop(0)
+           if current_result.success:
+                openai_tts.synthesize_speech(current_result.response)
+           else:
                 openai_tts.synthesize_speech("Ich habe das nicht verstanden")
-            utterance = None
-            if action == "exit":
+           if current_result.action == "exit":
                 break
 
+        time.sleep(0.5)
+        
     wakeword_detection.stop()
 
 if __name__ == "__main__":
     main()
-   # Erstellen Sie eine requirements.txt-Datei
-    with open("requirements.txt", "w") as f:
-        subprocess.call(["pip", "freeze"], stdout=f) 
+
 
 

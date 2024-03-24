@@ -2,6 +2,7 @@ import os
 import yaml
 import importlib.util
 import re
+from intent_response import IntentResponse
 
 class IntentHandler:
 
@@ -46,7 +47,7 @@ class IntentHandler:
                     if cleaned_recognized_text == cleaned_utterance:
                         action = intent['action']
                         response = skill.execute_skill(action, {})
-                        return True, response, action
+                        return IntentResponse(True, response, action)
                     
                     utterance_pattern = "^" + re.sub(self.VARIABLE_PATTERN, r'(.+?)', cleaned_utterance + "$")                    
                     findings = re.findall(utterance_pattern, cleaned_recognized_text)
@@ -61,26 +62,26 @@ class IntentHandler:
                                 values[variables[key_index]] = item
                         action = intent['action']
                         response = skill.execute_skill(action, values)
-                        return True, response, action
+                        return IntentResponse(True, response, action)
 
-        return False, "", "not_found"
+        return IntentResponse(False, "", "not_found")
 
 if __name__ == "__main__":
     skill_package_path = "skills"
     intent_handler = IntentHandler(skill_package_path)
 
     utterance= "Spiele Musik"
-    success, response, action = intent_handler.handle_intent(utterance)
-    print(response)
+    result = intent_handler.handle_intent(utterance)
+    print(result.response)
 
     utterance= "Schalte das Licht im Wohnzimmer aus"
-    success, response, action = intent_handler.handle_intent(utterance)
-    print(response)
+    result = intent_handler.handle_intent(utterance)
+    print(result.response)
 
     utterance= "Schalte das Licht ganz aus"
-    success, response, action = intent_handler.handle_intent(utterance)
-    print(response)
+    result = intent_handler.handle_intent(utterance)
+    print(result.response)
 
     utterance= "Wie wird das Wetter heute"
-    success, response, action = intent_handler.handle_intent(utterance)
-    print(response)
+    result = intent_handler.handle_intent(utterance)
+    print(result.response)
