@@ -13,12 +13,15 @@ class IntentHandler:
         self.load_skills()
 
     def load_skills(self):
+        skill_dirs = []
         skills_path = os.path.join(os.getcwd(), self.skills_dir)
-        skills_subdirs = [d for d in os.listdir(skills_path) if os.path.isdir(os.path.join(skills_path, d))]
+        for packages_dir in os.listdir(skills_path):
+            skill_dir = os.path.join(skills_path, packages_dir)
+            skill_dirs.extend([os.path.join(skill_dir, d) for d in os.listdir(skill_dir) if os.path.isdir(os.path.join(skill_dir, d))])
 
-        for skill_dir in skills_subdirs:
-            init_file = os.path.join(skills_path, skill_dir, '__init__.py')
-            intents_file = os.path.join(skills_path, skill_dir, 'intents.yaml')
+        for skill_dir in skill_dirs:
+            init_file = os.path.join(skill_dir, '__init__.py')
+            intents_file = os.path.join(skill_dir, 'intents.yaml')
 
             if os.path.isfile(init_file) and os.path.isfile(intents_file):
                 skill_module = importlib.util.module_from_spec(
@@ -28,14 +31,12 @@ class IntentHandler:
                 with open(intents_file, 'r') as file:
                     intents_data = yaml.safe_load(file)
                     intents = intents_data.get('intents', [])
-                    for intent in intents:
-                        for utterance in intent["utterances"]:
-                            utterance = "^" + re.sub(self.VARIABLE_PATTERN, r'(.+?)', utterance + "$") 
                     skill_module.intents = intents
                 
                 self.skills.append(skill_module)
 
     def handle_intent(self, recognized_text):
+        values = {"recognized_text": recognized_text}
 
         for skill in self.skills:
             for intent in skill.intents:
@@ -49,9 +50,8 @@ class IntentHandler:
                     
                     utterance_pattern = "^" + re.sub(self.VARIABLE_PATTERN, r'(.+?)', cleaned_utterance + "$")                    
                     findings = re.findall(utterance_pattern, cleaned_recognized_text)
-                    
+
                     for find in findings:
-                        values = {}
                         variables = {}
                         variables = re.findall(self.VARIABLE_PATTERN, cleaned_utterance)
                         if isinstance(find, str):

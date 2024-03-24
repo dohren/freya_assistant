@@ -2,7 +2,7 @@
 __pycache__/
 .venv/
 
-speech.mp3
+resources/speech.mp3
 
 out/
 .idea/

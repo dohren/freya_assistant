@@ -1,0 +1,7 @@
+intents:
+  - name: ChatGPT
+    utterances:
+      - Bitte erzähle mir etwas über {thema}
+      - erzähle mir etwas über {thema}
+      - was weißt du über {thema}
+    action: chatgpt
