@@ -15,7 +15,7 @@ Freya Assistant is a simple voice assistant in Python. It utilizes Porcupine for
 
 ## Usage
 
-1. Set the Porcupine API key as an environment variable: `export PRCUPINE_ACCESS_KEY=your-porcupine-api-key`
+1. Set the Porcupine API key as an environment variable: `export PORCUPINE_ACCESS_KEY=your-porcupine-api-key`
 2. Set the OpenAI API key as an environment variable: `export OPENAI_API_KEY=your-openai-api-key`
 3. Run the assistant: `freya_application.py`
 
