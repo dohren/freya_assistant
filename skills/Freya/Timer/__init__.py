@@ -8,7 +8,6 @@ def sleep(duration):
     time.sleep(duration)
 
 def execute_skill(action, values):
-    print(values["number"])
     duration = int(values["number"])  # Wert in eine Ganzzahl konvertieren
     unit = values["unit"]
 

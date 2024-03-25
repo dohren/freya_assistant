@@ -2,15 +2,10 @@ from google_stt import GoogleSpeechRecognition
 from wakeword import WakewordDetection
 from intent_handler import IntentHandler
 from openai_tts import OpenaiTTS
-from intent_response import IntentResponse
 import time
 import threading
 
-keywords = ["hey freya"]
-keyword_paths = ['resources/freya.ppn']
-model_path = 'resources/porcupine_params_de.pv'
-
-wakeword_detection = WakewordDetection(keywords, keyword_paths, model_path)
+wakeword_detection = WakewordDetection()
 speech_recognizer = GoogleSpeechRecognition()
 intent_handler = IntentHandler("skills")
 openai_tts = OpenaiTTS()
@@ -36,7 +31,7 @@ def main():
             thread.start()
 
         if len(result) > 0:
-           current_result: IntentResponse = result.pop(0)
+           current_result = result.pop(0)
            if current_result.success:
                 openai_tts.synthesize_speech(current_result.response)
            else:

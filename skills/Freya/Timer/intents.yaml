@@ -2,4 +2,7 @@ intents:
   - name: Stopuhr
     utterances:
       - Stelle mir {artikel} Timer auf {number} {unit}
+      - Stelle {artikel} Timer auf {number} {unit}
+      - Timer {number} {unit}
+      - Timer auf {number} {unit}
     action: timer
