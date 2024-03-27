@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 
 resources/speech.mp3
+resources/sphinx
 
 out/
 .idea/

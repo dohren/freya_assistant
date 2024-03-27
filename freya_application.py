@@ -1,5 +1,5 @@
 from google_stt import GoogleSpeechRecognition
-from wakeword import WakewordDetection
+from sphinx_wakeword import WakewordDetection
 from intent_handler import IntentHandler
 from openai_tts import OpenaiTTS
 import time
@@ -23,11 +23,11 @@ def main():
         utterance = None
 
         if wakeword_detection.wake_word_detected.is_set():
-            utterance = speech_recognizer.recognize_speech()
             wakeword_detection.wake_word_detected.clear()
-
+            utterance = speech_recognizer.recognize_speech()
+            
         if utterance:
-            thread = threading.Thread(target=handle_intent_thread, args=(utterance,))
+            thread = threading.Thread(target=handle_intent_thread, args=(utterance,))        
             thread.start()
 
         if len(result) > 0:

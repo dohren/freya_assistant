@@ -1,10 +1,10 @@
 # Freya Assistant
 
-Freya Assistant is a simple voice assistant in Python. It utilizes Porcupine for wake word detection, OpenAI for text-to-speech (TTS), and Google Speech API for speech-to-text (STT).
+Freya Assistant is a simple voice assistant in Python. It utilizes PocketSphinx for wake word detection, OpenAI for text-to-speech (TTS), and Google Speech API for speech-to-text (STT).
 
 ## Requirements
 
-- Porcupine API key: `PRCUPINE_ACCESS_KEY`
+- OpenWeahter Map key: `OPEN_WEATHER_MAP_KEY`
 - OpenAI API key: `OPENAI_API_KEY`
 
 ## Installation
@@ -15,9 +15,8 @@ Freya Assistant is a simple voice assistant in Python. It utilizes Porcupine for
 
 ## Usage
 
-1. Set the Porcupine API key as an environment variable: `export PORCUPINE_ACCESS_KEY=your-porcupine-api-key`
-2. Set the OpenAI API key as an environment variable: `export OPENAI_API_KEY=your-openai-api-key`
-3. Run the assistant: `freya_application.py`
+1. Set the OpenAI API key as an environment variable: `export OPENAI_API_KEY=your-openai-api-key`
+2. Run the assistant: `freya_application.py`
 
 To interact with the Freya Assistant, simply say the wake word "Freya" followed by your command. The assistant will convert your speech to text and then respond using text-to-speech.
 
@@ -46,3 +45,6 @@ Contributions are welcome! If you would like to contribute to Freya Assistant, p
 ## Contact
 
 For any questions or feedback, please contact [Andreas Dohren](https://github.com/dohren).
+
+https://sourceforge.net/projects/cmusphinx/files/Acoustic%20and%20Language%20Models/German/
+tar -xzvf cmusphinx-de-voxforge-5.2.tar.gz
