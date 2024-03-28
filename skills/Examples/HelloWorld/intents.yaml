@@ -1,0 +1,6 @@
+intents:
+  - name: HelloWorld
+    utterances:
+      - Hello {something} Example 
+      - Hello {something}
+    action: hello_world
