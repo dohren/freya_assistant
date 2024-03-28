@@ -2,7 +2,7 @@ from google_stt import GoogleSpeechRecognition
 from sphinx_wakeword import WakewordDetection
 from intent_handler import IntentHandler
 from openai_tts import OpenaiTTS
-import time
+import sys
 import threading
 
 wakeword_detection = WakewordDetection()
@@ -16,6 +16,7 @@ def handle_intent_thread(utterance):
     result.append(intent_handler.handle_intent(utterance))
 
 def main():
+    wakeword_detection.daemon = True 
     wakeword_detection.start()    
     openai_tts.synthesize_speech("Hi, ich bin Frehja. Wie kann ich dir helfen?")
 
@@ -27,7 +28,7 @@ def main():
             utterance = speech_recognizer.recognize_speech()
             
         if utterance:
-            thread = threading.Thread(target=handle_intent_thread, args=(utterance,))        
+            thread = threading.Thread(target=handle_intent_thread, args=(utterance,))       
             thread.start()
 
         if len(result) > 0:
@@ -38,10 +39,8 @@ def main():
                 openai_tts.synthesize_speech("Ich habe das nicht verstanden")
            if current_result.action == "exit":
                 break
-
-        time.sleep(0.5)
-        
-    wakeword_detection.stop()
+    
+    sys.exit()
 
 if __name__ == "__main__":
     main()

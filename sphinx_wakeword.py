@@ -8,15 +8,11 @@ class WakewordDetection(threading.Thread):
         threading.Thread.__init__(self)
         self.wake_word_detected = threading.Event()
         self.recognizer = LiveSpeech(kws='resources/wakewords.txt')
-        self.should_run = True
 
     def run(self):
         for phrase in self.recognizer:
             self.wake_word_detected.set()
             print(f"Detected {phrase}")
-
-    def stop(self):
-        sys.exit()
 
 if __name__ == "__main__":
     wakeword_detection = WakewordDetection()
