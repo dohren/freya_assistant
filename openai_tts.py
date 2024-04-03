@@ -7,7 +7,7 @@ class OpenaiTTS:
         self.client = OpenAI()
         self.speech_file_path = Path(__file__).parent / speech_file_path
 
-    def synthesize_speech(self, text):
+    def speak(self, text):
         response = self.client.audio.speech.create(
           model="tts-1",
           voice="nova",
@@ -19,4 +19,4 @@ class OpenaiTTS:
 
 if __name__ == "__main__":
     tts = OpenaiTTS()
-    tts.synthesize_speech("Guten Tag, wie geht es dir?")
+    tts.speak("Guten Tag, wie geht es dir?")

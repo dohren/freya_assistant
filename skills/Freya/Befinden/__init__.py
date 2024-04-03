@@ -1,4 +1,6 @@
 import time
+from openai_tts import OpenaiTTS
+tts = OpenaiTTS()
 
 def execute_skill(action, values):
-    return "Mir geht es hervoragend. Und dir?"
+    tts.speak("Mir geht es hervoragend. Und dir?")

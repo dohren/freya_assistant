@@ -1,5 +1,4 @@
 import threading
-import time
 from intent_request import IntentRequest
 
 class SkillWorker:
@@ -32,15 +31,8 @@ class SkillWorker:
 
     def run_skill(self, key, intent_request, stop_event):
         print(f"Thread {key} gestartet.")
-        print(intent_request.values)
-        
-        #start_zeit = time.time()
+        intent_request.skill.execute_skill(key, intent_request.values)
 
-        #while not stop_event.is_set() and time.time() - start_zeit < dauer:
-        #    print(f"Arbeite in Thread {key}...")
-        #    time.sleep(1)
-
-        # Aufräumlogik nach Beendigung des Threads
         self.aufraeumen(key)
         print(f"Thread {key} beendet.")
 
@@ -55,11 +47,6 @@ class SkillWorker:
             print("Alle Threads beendet.")
 
 if __name__ == "__main__":
-# Beispielverwendung
     app = SkillWorker()
     intent_request = IntentRequest(10, '{"test": "test"}', "Task1")
     app.execute(intent_request)
-    #app.execute("Task2", 5)
-
-    #time.sleep(6)
-    #app.execute("Task1", 7)

@@ -1,10 +1,9 @@
 import time
 from openai_tts import OpenaiTTS
-
+tts = OpenaiTTS()
 
 def sleep(duration):
-    openai_tts = OpenaiTTS()
-    openai_tts.synthesize_speech("Ich starte den Timer")
+    tts.speak("Ich starte den Timer")
     time.sleep(duration)
 
 def execute_skill(action, values):
@@ -22,7 +21,7 @@ def execute_skill(action, values):
     else:
         return "Ungültige Einheit!"
 
-    return "Der Timer ist abgelaufen!"
+    tts.speak("Der Timer ist abgelaufen!")
 
 if __name__ == "__main__":
     action = "start_timer"

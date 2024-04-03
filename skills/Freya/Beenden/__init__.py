@@ -1,2 +1,8 @@
+import sys
+from openai_tts import OpenaiTTS
+
+
 def execute_skill(action, values):
-    return "Tchüüss und Gute Nacht"
+    tts = OpenaiTTS()
+    tts.speak("Tchüüss und Gute Nacht")
+    sys.exit()
