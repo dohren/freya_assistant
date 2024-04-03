@@ -2,9 +2,9 @@ import os
 import yaml
 import importlib.util
 import re
-from intent_response import IntentResponse
+from intent_request import IntentRequest
 
-class IntentHandler:
+class SkillCrawler:
 
     VARIABLE_PATTERN = pattern = r'\{(.+?)\}' 
 
@@ -36,7 +36,7 @@ class IntentHandler:
                 
                 self.skills.append(skill_module)
 
-    def handle_intent(self, recognized_text):
+    def find_intent(self, recognized_text):
         values = {"recognized_text": recognized_text}
 
         for skill in self.skills:
@@ -46,8 +46,8 @@ class IntentHandler:
                     cleaned_utterance = utterance.lower().strip()
                     if cleaned_recognized_text == cleaned_utterance:
                         action = intent['action']
-                        response = skill.execute_skill(action, {})
-                        return IntentResponse(True, response, action)
+                        #response = skill.execute_skill(action, {})
+                        return IntentRequest(skill, values, action)
                     
                     utterance_pattern = "^" + re.sub(self.VARIABLE_PATTERN, r'(.+?)', cleaned_utterance + "$")                    
                     findings = re.findall(utterance_pattern, cleaned_recognized_text)
@@ -61,27 +61,28 @@ class IntentHandler:
                             for key_index, item in enumerate(find):
                                 values[variables[key_index]] = item
                         action = intent['action']
-                        response = skill.execute_skill(action, values)
-                        return IntentResponse(True, response, action)
+                        #response = skill.execute_skill(action, values)
+                        return IntentRequest(skill, values, action)
 
-        return IntentResponse(False, "", "not_found")
+        return IntentRequest(None, "", "not_found")
 
 if __name__ == "__main__":
     skill_package_path = "skills"
-    intent_handler = IntentHandler(skill_package_path)
+    skill_crawler = SkillCrawler(skill_package_path)
 
     utterance= "Spiele Musik"
-    result = intent_handler.handle_intent(utterance)
-    print(result.response)
+    intent_request = skill_crawler.find_intent(utterance)
+    print(intent_request.values)
 
     utterance= "Schalte das Licht im Wohnzimmer aus"
-    result = intent_handler.handle_intent(utterance)
-    print(result.response)
+    intent_request = skill_crawler.find_intent(utterance)
+    print(intent_request.values)
 
     utterance= "Schalte das Licht ganz aus"
-    result = intent_handler.handle_intent(utterance)
-    print(result.response)
+    intent_request = skill_crawler.find_intent(utterance)
+    print(intent_request.values)
 
     utterance= "Wie wird das Wetter heute"
-    result = intent_handler.handle_intent(utterance)
-    print(result.response)
+    intent_request = skill_crawler.find_intent(utterance)
+    intent_request.skill.execute_skill(intent_request.action, intent_request.values)
+    print(intent_request.values)

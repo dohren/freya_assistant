@@ -1,19 +1,18 @@
 from google_stt import GoogleSpeechRecognition
 from sphinx_wakeword import WakewordDetection
-from intent_handler import IntentHandler
+from skill_crawler import SkillCrawler
 from openai_tts import OpenaiTTS
+from skill_worker import SkillWorker
 import sys
-import threading
+
 
 wakeword_detection = WakewordDetection()
 speech_recognizer = GoogleSpeechRecognition()
-intent_handler = IntentHandler("skills")
+skill_crawler = SkillCrawler("skills")
 openai_tts = OpenaiTTS()
+skill_worker = SkillWorker()
 
 result = []
-
-def handle_intent_thread(utterance):
-    result.append(intent_handler.handle_intent(utterance))
 
 def main():
     wakeword_detection.daemon = True 
@@ -27,9 +26,11 @@ def main():
             wakeword_detection.wake_word_detected.clear()
             utterance = speech_recognizer.recognize_speech()
             
+            
         if utterance:
-            thread = threading.Thread(target=handle_intent_thread, args=(utterance,))       
-            thread.start()
+            intent_request = skill_crawler.find_intent(utterance)
+            #skill_worker.execute(intent_request)
+            
 
         if len(result) > 0:
            current_result = result.pop(0)

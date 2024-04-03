@@ -5,6 +5,7 @@ import os
 
 def execute_skill(action, values):
     print(values)
+    print("#######################")
     now = datetime.now()
     current_hour = now.strftime("%H")
     current_minute = now.strftime("%M")
