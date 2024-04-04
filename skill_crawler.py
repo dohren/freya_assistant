@@ -28,13 +28,20 @@ class SkillCrawler:
                 skill_module = importlib.util.module_from_spec(
                     importlib.util.spec_from_file_location(f"{self.skills_dir}.{skill_dir}", init_file))
                 importlib.util.spec_from_file_location(f"{self.skills_dir}.{skill_dir}", init_file).loader.exec_module(skill_module)
+                self.append_skill(skill_module, intents_file)
 
-                with open(intents_file, 'r') as file:
-                    intents_data = yaml.safe_load(file)
-                    intents = intents_data.get('intents', [])
-                    skill_module.intents = intents
+    def append_skill(self, skill_module, intents_file):
+        with open(intents_file, 'r') as file:
+            intents_data = yaml.safe_load(file)
+            intents = intents_data.get('intents', [])
+            skill_module.intents = intents
+            for intent in intents:
+                if intent["action"] == "fallback": 
+                    self.fallback_skill = skill_module
+    
+        self.skills.append(skill_module)
                 
-                self.skills.append(skill_module)
+
 
     def find_intent(self, recognized_text):
         values = {"recognized_text": recognized_text}
@@ -46,7 +53,6 @@ class SkillCrawler:
                     cleaned_utterance = utterance.lower().strip()
                     if cleaned_recognized_text == cleaned_utterance:
                         action = intent['action']
-                        #response = skill.execute_skill(action, {})
                         return IntentRequest(skill, values, action)
                     
                     utterance_pattern = "^" + re.sub(self.VARIABLE_PATTERN, r'(.+?)', cleaned_utterance + "$")                    
@@ -61,10 +67,9 @@ class SkillCrawler:
                             for key_index, item in enumerate(find):
                                 values[variables[key_index]] = item
                         action = intent['action']
-                        #response = skill.execute_skill(action, values)
                         return IntentRequest(skill, values, action)
 
-        return IntentRequest(None, "", "not_found")
+        return IntentRequest(self.fallback_skill, values, "default")
 
 if __name__ == "__main__":
     skill_package_path = "skills"

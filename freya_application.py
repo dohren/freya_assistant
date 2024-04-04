@@ -30,10 +30,13 @@ def main():
         if utterance:
             intent_request = skill_crawler.find_intent(utterance)
             skill_worker.execute(intent_request)
+            time.sleep(3)
             
         if intent_request and intent_request.action == "exit":
            time.sleep(5)
            break
+       
+        time.sleep(1)
     
     sys.exit()
 

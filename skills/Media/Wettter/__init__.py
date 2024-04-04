@@ -2,10 +2,10 @@
 import requests
 from datetime import datetime
 import os
+from openai_tts import OpenaiTTS
 
 def execute_skill(action, values):
-    print(values)
-    print("#######################")
+    tts = OpenaiTTS()
     now = datetime.now()
     current_hour = now.strftime("%H")
     current_minute = now.strftime("%M")
@@ -21,9 +21,9 @@ def execute_skill(action, values):
         main = data["main"]
         current_temperature = main["temp"]
         
-        return f"{time_string} Die aktuelle Temperatur in {city_name} ist {current_temperature} Grad Celsius."
+        tts.speak(f"{time_string} Die aktuelle Temperatur in {city_name} ist {current_temperature} Grad Celsius.")
     else:
-        return f"{time_string} Die Wetterinformationen konnten nicht abgerufen werden."
+        tts.speak(f"{time_string} Die Wetterinformationen konnten nicht abgerufen werden.")
 
 if __name__ == "__main__":
     print(execute_skill("", {}))

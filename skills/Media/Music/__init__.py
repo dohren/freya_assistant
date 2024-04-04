@@ -1,3 +1,5 @@
+from openai_tts import OpenaiTTS
 
 def execute_skill(action, values):
-    return "lalala"
+    tts = OpenaiTTS()
+    tts.speak("lalala")

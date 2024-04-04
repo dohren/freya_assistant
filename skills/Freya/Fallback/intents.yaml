@@ -1,0 +1,5 @@
+intents:
+  - name: Fallback
+    utterances:
+      - fallback
+    action: fallback
