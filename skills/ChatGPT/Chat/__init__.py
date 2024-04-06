@@ -1,12 +1,15 @@
+import sys
+import os.path
 from openai import OpenAI
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 from openai_tts import OpenaiTTS
 
 def execute_skill(action, values):
         recognized_text = values["recognized_text"]
         
         if recognized_text:
-            openai_tts = OpenaiTTS()
-            openai_tts.synthesize_speech("Gib mir bitte einen Moment, ich überlege")
+            tts = OpenaiTTS()
+            tts.speak("Gib mir bitte einen Moment, ich überlege")
             client = OpenAI()
             completion = client.chat.completions.create(
             model="gpt-3.5-turbo-0613",
@@ -15,6 +18,9 @@ def execute_skill(action, values):
                     {"role": "user", "content": recognized_text}
                 ]
             )
-            return completion.choices[0].message.content
+            tts.speak(completion.choices[0].message.content)
 
-        return "Das habe ich nicht verstanden"
+        "Das habe ich nicht verstanden"
+
+if __name__ == "__main__":
+      execute_skill("chatgpt", {"recognized_text": "wo wohnt Asterix"})

@@ -6,7 +6,6 @@ from skill_worker import SkillWorker
 import time
 import sys
 
-
 wakeword_detection = WakewordDetection()
 speech_recognizer = GoogleSpeechRecognition()
 skill_crawler = SkillCrawler("skills")
