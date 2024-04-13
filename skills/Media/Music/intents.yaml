@@ -4,4 +4,6 @@ intents:
       - Musik abspielen
       - Spiel Musik
       - Schalte die Musik {state}
+      - Spiele mir das Lied {song}
+      - Spiele mir ein Lied von {song}
     action: switch_music
