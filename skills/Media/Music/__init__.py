@@ -1,11 +1,14 @@
 import sys
 import os.path
+import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 from openai_tts import OpenaiTTS
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-
+client_id = os.getenv("SPOTIFY_CLIENT_ID")
+client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
+redirect_uri = "http://localhost:8888/callback"
 
 
 def execute_skill(action, values):

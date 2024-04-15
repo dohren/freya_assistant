@@ -6,6 +6,9 @@ Freya Assistant is a simple voice assistant in Python. It utilizes PocketSphinx 
 
 - OpenWeahter Map key: `OPEN_WEATHER_MAP_KEY`
 - OpenAI API key: `OPENAI_API_KEY`
+- Spotify Client Id: `SPOTIFY_CLIENT_ID`
+- Spotify Client Secret: `SPOTIFY_CLIENT_SECRET`
+
 
 ## Installation
 
