@@ -6,4 +6,12 @@ intents:
       - Schalte die Musik {state}
       - Spiele mir das Lied {song}
       - Spiele mir ein Lied von {song}
+      - Spiel mir ein Lied von {song}
     action: switch_music
+  - name: StopMusic
+    utterances:
+      - Stoppe die Musik
+      - Musik Stop
+      - Aufhören
+      - Stop
+    action: stop_music
