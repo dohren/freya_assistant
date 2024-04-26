@@ -12,7 +12,6 @@ class IntentFlaskServer:
             data = request.get_json()
             if not data:
                 return jsonify({"error": "No data provided"}), 400
-
             try:
                 values = data['values']
                 action = data['action']
