@@ -8,10 +8,12 @@ class SkillCrawler:
 
     VARIABLE_PATTERN = pattern = r'\{(.+?)\}' 
 
+
     def __init__(self, skill_package_path):
         self.skills = []
         self.skills_dir = skill_package_path
         self.load_skills()
+
 
     def load_skills(self):
         skill_dirs = []
@@ -30,6 +32,7 @@ class SkillCrawler:
                 importlib.util.spec_from_file_location(f"{self.skills_dir}.{skill_dir}", init_file).loader.exec_module(skill_module)
                 self.append_skill(skill_module, intents_file)
 
+
     def append_skill(self, skill_module, intents_file):
         with open(intents_file, 'r') as file:
             intents_data = yaml.safe_load(file)
@@ -42,8 +45,7 @@ class SkillCrawler:
         self.skills.append(skill_module)
                 
 
-
-    def find_intent(self, recognized_text):
+    def find_intent_utterance(self, recognized_text):
         values = {"recognized_text": recognized_text}
 
         for skill in self.skills:
@@ -71,33 +73,36 @@ class SkillCrawler:
 
         return IntentRequest(self.fallback_skill, values, "default")
 
-    def find_skill(self, action, values):
+
+    def find_intent_by_action(self, action, values):
         for skill in self.skills:
             for intent in skill.intents:
                 if action == intent["action"]:
                     return IntentRequest(skill, values, action)
         return IntentRequest(self.fallback_skill, values, "default")
 
+
 if __name__ == "__main__":
     skill_package_path = "skills"
     skill_crawler = SkillCrawler(skill_package_path)
 
     utterance= "Spiele Musik"
-    intent_request = skill_crawler.find_intent(utterance)
+    intent_request = skill_crawler.find_intent_utterance(utterance)
     print(intent_request.values)
 
     utterance= "Schalte das Licht im Wohnzimmer aus"
-    intent_request = skill_crawler.find_intent(utterance)
+    intent_request = skill_crawler.find_intent_utterance(utterance)
     print(intent_request.values)
 
     utterance= "Schalte das Licht ganz aus"
-    intent_request = skill_crawler.find_intent(utterance)
+    intent_request = skill_crawler.find_intent_utterance(utterance)
     print(intent_request.values)
 
     utterance= "Wie wird das Wetter heute"
-    intent_request = skill_crawler.find_intent(utterance)
+    intent_request = skill_crawler.find_intent_utterance(utterance)
     intent_request.skill.execute_skill(intent_request.action, intent_request.values)
     print(intent_request.values)
 
-    skill = skill_crawler.find_skill("get_weather")
-    intent_request.skill.execute_skill("get_weather", [])
+    intent_request = skill_crawler.find_intent_action("get_weather", [])
+    intent_request.skill.execute_skill(intent_request.action, intent_request.values)
+    

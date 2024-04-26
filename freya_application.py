@@ -31,7 +31,7 @@ def run_voice_assistant():
             wakeword_detection.wake_word_detected.clear()
             
         if utterance:
-            intent_request = skill_crawler.find_intent(utterance)
+            intent_request = skill_crawler.find_intent_utterance(utterance)
             
         if intent_request:
             skill_worker.execute(intent_request)
