@@ -7,6 +7,7 @@ class SkillWorker:
         self.stop_events = {}
 
     def execute(self, intent_request):
+        print(intent_request)
         key = intent_request.action
         # Wenn bereits ein Thread für diesen Key läuft, stoppe ihn zuerst
         if intent_request.action in self.threads:

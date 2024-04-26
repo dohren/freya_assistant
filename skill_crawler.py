@@ -71,6 +71,13 @@ class SkillCrawler:
 
         return IntentRequest(self.fallback_skill, values, "default")
 
+    def find_skill(self, action, values):
+        for skill in self.skills:
+            for intent in skill.intents:
+                if action == intent["action"]:
+                    return IntentRequest(skill, values, action)
+        return IntentRequest(self.fallback_skill, values, "default")
+
 if __name__ == "__main__":
     skill_package_path = "skills"
     skill_crawler = SkillCrawler(skill_package_path)
@@ -91,3 +98,6 @@ if __name__ == "__main__":
     intent_request = skill_crawler.find_intent(utterance)
     intent_request.skill.execute_skill(intent_request.action, intent_request.values)
     print(intent_request.values)
+
+    skill = skill_crawler.find_skill("get_weather")
+    intent_request.skill.execute_skill("get_weather", [])
