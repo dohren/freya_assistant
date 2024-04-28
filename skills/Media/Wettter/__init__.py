@@ -2,7 +2,7 @@
 import requests
 from datetime import datetime
 import os
-from openai_tts import OpenaiTTS
+from common.openai_tts import OpenaiTTS
 
 def execute_skill(action, values):
     tts = OpenaiTTS()

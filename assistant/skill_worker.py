@@ -1,5 +1,5 @@
 import threading
-from intent_request import IntentRequest
+from assistant.intent_request import IntentRequest
 
 class SkillWorker:
     def __init__(self):

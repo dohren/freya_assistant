@@ -3,7 +3,7 @@ from openai import OpenAI
 import playsound
 
 class OpenaiTTS:
-    def __init__(self, speech_file_path="resources/speech.mp3"):
+    def __init__(self, speech_file_path="../resources/speech.mp3"):
         self.client = OpenAI()
         self.speech_file_path = Path(__file__).parent / speech_file_path
 

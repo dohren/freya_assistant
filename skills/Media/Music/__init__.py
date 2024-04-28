@@ -2,7 +2,7 @@ import sys
 import os.path
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
-from openai_tts import OpenaiTTS
+from common import OpenaiTTS
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 

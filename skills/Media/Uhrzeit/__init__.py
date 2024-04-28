@@ -1,6 +1,6 @@
 
 from datetime import datetime
-from openai_tts import OpenaiTTS
+from common import OpenaiTTS
 
 def execute_skill(action, values):
     tts = OpenaiTTS()

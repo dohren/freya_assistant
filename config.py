@@ -1,7 +1,0 @@
-class Configuration():
-    pass
-
-
-
-
-    

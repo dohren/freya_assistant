@@ -1,5 +1,5 @@
 import time
-from openai_tts import OpenaiTTS
+from common import OpenaiTTS
 tts = OpenaiTTS()
 
 def sleep(duration):

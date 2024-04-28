@@ -2,7 +2,7 @@ import os
 import yaml
 import importlib.util
 import re
-from intent_request import IntentRequest
+from assistant.intent_request import IntentRequest
 
 class SkillCrawler:
 
@@ -45,7 +45,7 @@ class SkillCrawler:
         self.skills.append(skill_module)
                 
 
-    def find_intent_utterance(self, recognized_text):
+    def find_intent_by_utterance(self, recognized_text):
         values = {"recognized_text": recognized_text}
 
         for skill in self.skills:
@@ -87,22 +87,22 @@ if __name__ == "__main__":
     skill_crawler = SkillCrawler(skill_package_path)
 
     utterance= "Spiele Musik"
-    intent_request = skill_crawler.find_intent_utterance(utterance)
+    intent_request = skill_crawler.find_intent_by_utterance(utterance)
     print(intent_request.values)
 
     utterance= "Schalte das Licht im Wohnzimmer aus"
-    intent_request = skill_crawler.find_intent_utterance(utterance)
+    intent_request = skill_crawler.find_intent_by_utterance(utterance)
     print(intent_request.values)
 
     utterance= "Schalte das Licht ganz aus"
-    intent_request = skill_crawler.find_intent_utterance(utterance)
+    intent_request = skill_crawler.find_intent_by_utterance(utterance)
     print(intent_request.values)
 
     utterance= "Wie wird das Wetter heute"
-    intent_request = skill_crawler.find_intent_utterance(utterance)
+    intent_request = skill_crawler.find_intent_by_utterance(utterance)
     intent_request.skill.execute_skill(intent_request.action, intent_request.values)
     print(intent_request.values)
 
-    intent_request = skill_crawler.find_intent_action("get_weather", [])
+    intent_request = skill_crawler.find_intent_by_action("get_weather", [])
     intent_request.skill.execute_skill(intent_request.action, intent_request.values)
     

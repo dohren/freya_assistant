@@ -2,7 +2,7 @@ import sys
 import os.path
 from openai import OpenAI
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
-from openai_tts import OpenaiTTS
+from common import OpenaiTTS
 
 def execute_skill(action, values):
         recognized_text = values["recognized_text"]

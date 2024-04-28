@@ -1,0 +1,6 @@
+intents:
+  - name: Beenden
+    utterances:
+      - Bitte sage {text}
+      - sage {text}
+    action: speak
