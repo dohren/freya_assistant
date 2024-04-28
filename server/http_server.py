@@ -11,7 +11,7 @@ class IntentFlaskServer:
         self.skill_crawler = SkillCrawler("skills")
         self.skill_worker = SkillWorker()
         openai_tts = OpenaiTTS()
-        openai_tts.speak("Hi, ich bin Frehja. Wie kann ich dir helfen?")
+        openai_tts.speak("Der Backend-Service für das Freya System wurde aktiviert. Bitte starte den Client, um mit Freya zu sprechen") 
 
         @self.app.route('/intent', methods=['POST'])
         def handle_intent():
