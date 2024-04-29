@@ -5,6 +5,8 @@ PyYAML==6.0.1
 SpeechRecognition==3.10.1
 pocketsphinx
 spotipy
+flask_socketio
+python-socketio[client]
 
 #sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
 #sudo apt-get install ffmpeg libav-tools

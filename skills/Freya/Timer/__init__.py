@@ -21,7 +21,7 @@ def execute_skill(action, values):
     else:
         return "Ungültige Einheit!"
 
-    tts.speak("Der Timer ist abgelaufen!")
+    return "Der Timer ist abgelaufen!"
 
 if __name__ == "__main__":
     action = "start_timer"
