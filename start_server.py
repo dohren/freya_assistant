@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 from assistant import SkillCrawler, SkillWorker
 from common import OpenaiTTS
@@ -13,25 +13,46 @@ openai_tts = OpenaiTTS()
 
 initialized = False
 
+clients = {}
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@socketio.on('connect_event')
-def handle_connect_event():
-    emit('message', 'Server connected')
+@socketio.on('connect')
+def handle_connect():
+    user_info = request.args.get('username')
+    clients[user_info] = request.sid
 
 @socketio.on('intent_request')
 def handle_intent_request(data):
     if not data or 'values' not in data or 'action' not in data:
         emit('error', {'error': 'Invalid intent request'})
         return
-
     values = data['values']
     action = data['action']
     intent_request = skill_crawler.find_intent_by_action(action, values)
     response = skill_worker.execute(intent_request)
     emit('intent_response', {'status': 'success', 'message': 'Intent processed', 'response': response})
+
+
+@app.route('/intent', methods=['POST'])
+def post_intent():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    try:
+        values = data['values']
+        action = data['action']
+        intent_request = skill_crawler.find_intent_by_action(action, values)      
+        print(action)       
+        response = skill_worker.execute(intent_request)
+        emit('message', {'message': response}, namespace='/', room=clients["freya"])
+        return jsonify({"status": "success", "message": "Intent processed", "response": response}), 200
+    except KeyError as e:
+        return jsonify({"error": f"Missing key: {e}"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @socketio.on('utterance')
 def handle_utterance(data):

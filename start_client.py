@@ -20,11 +20,17 @@ def run_voice_assistant():
         print('Received utterance response:', data)
         openai_tts.speak(data["response"])
 
-    sio.connect('http://localhost:5000/chat?username=freya', namespaces=['/chat'])
+    @sio.event
+    def message(data):
+        print(data["message"])
+
+    sio.connect('http://localhost:5000/?username=freya')
 
     wakeword_detection.daemon = True
     wakeword_detection.start()
     
+    sio.emit('utterance', { 'utterance': "test" })
+
     while True:
         utterance = None
 
