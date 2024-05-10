@@ -13,7 +13,6 @@ class WakewordDetection(threading.Thread):
         for phrase in self.recognizer:
             self.wake_word_detected.set()
             print(f"Detected {phrase}")
-            time.sleep(2)
 
 if __name__ == "__main__":
     wakeword_detection = WakewordDetection()

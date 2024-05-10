@@ -11,7 +11,7 @@ class GoogleSpeechRecognition:
         with self.microhpone as source: 
             playsound.playsound('resources/ping.mp3', True) 
             audio = self.recognizer.adjust_for_ambient_noise(source)
-            audio = self.recognizer.listen(source)
+            audio = self.recognizer.listen(source, timeout=5, phrase_time_limit=10)
         try:
             print("Transkription: ", self.recognizer.recognize_google(audio, language="de-DE"))
             return self.recognizer.recognize_google(audio, language="de-DE")
