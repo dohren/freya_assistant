@@ -1,10 +1,11 @@
 *.pyc
 __pycache__/
 **/__pycache__/
-.venv/
+.venv
 
 resources/speech.mp3
 resources/sphinx
+resources/temp*
 
 out/
 .idea/

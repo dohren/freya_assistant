@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 from assistant import SkillCrawler, SkillWorker
-from common import OpenaiTTS
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'  # Replace with your secret key
@@ -9,7 +8,6 @@ socketio = SocketIO(app)
 
 skill_crawler = SkillCrawler("skills")
 skill_worker = SkillWorker()
-openai_tts = OpenaiTTS()
 
 initialized = False
 

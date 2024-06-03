@@ -11,20 +11,30 @@ class OpenaiTTS:
         self.client = OpenAI()
         self.speech_file_path = Path(__file__).parent / speech_file_path
         self.audio_queue = queue.Queue()
+        self.speaking_event = threading.Event()
+        self.play_thread = threading.Thread(target=self.play_audio_files)
+        self.play_thread.daemon = True
+        self.play_thread.start()
 
     def speak(self, text):
         # Split text by sentences (considering periods and commas)
         sentences = re.split(r'(?<=[.?])\s*', text)
-        
+
+        # Signal that speaking has started
+        self.speaking_event.clear()
+
         # Start a thread to download and queue audio files
         download_thread = threading.Thread(target=self.download_audio_files, args=(sentences,))
         download_thread.start()
         
-        # Play audio files as they are downloaded
-        self.play_audio_files()
-        
         # Wait for the download thread to finish
         download_thread.join()
+        
+        # Signal the end of the audio queue
+        self.audio_queue.put(None)
+        
+        # Wait until all audio files have been played
+        self.speaking_event.wait()
 
     def download_audio_files(self, sentences):
         for sentence in sentences:
@@ -40,15 +50,14 @@ class OpenaiTTS:
                 temp_file_path = self.speech_file_path / f"temp_{unique_id}.mp3"
                 response.stream_to_file(temp_file_path)
                 self.audio_queue.put(temp_file_path)
-        
-        # Signal that all files have been queued
-        self.audio_queue.put(None)
 
     def play_audio_files(self):
         while True:
             temp_file_path = self.audio_queue.get()
             if temp_file_path is None:
-                break  # Exit loop if the end signal is received
+                if self.audio_queue.empty():
+                    self.speaking_event.set()  # Signal that speaking has finished
+                continue
             playsound.playsound(str(temp_file_path), True)
             temp_file_path.unlink()  # Remove the temporary file after playing
 

@@ -1,7 +1,9 @@
 from common import GoogleSpeechRecognition
 from common import WakewordDetection
 from common import OpenaiTTS
+import time
 import socketio
+import threading
 
 wakeword_detection = WakewordDetection()
 speech_recognizer = GoogleSpeechRecognition()
@@ -9,16 +11,22 @@ openai_tts = OpenaiTTS()
 
 def run_voice_assistant():
     sio = socketio.Client()
+    speaking_event = threading.Event()
 
     @sio.event
     def connect():
         print('Connected to server')
-        openai_tts.speak("Guten Tag, mein Name ist Frehja. Die Sprachsteuerung ist aktiviert. Das konfigurierte Wakeword lautet - hey freya -. Bitte warte auf das akkustische Signal nach dem Wakeword, bevor du mit mir sprichst")
+        openai_tts.speak("Guten Tag, mein Name ist Frehja.")
+        openai_tts.speaking_event.wait()
 
     @sio.event
     def utterance_response(data):
         print('Received utterance response:', data)
+        speaking_event.set()  # Indicate that speaking has started
         openai_tts.speak(data["response"])
+        openai_tts.speaking_event.wait()
+        speaking_event.clear()  # Indicate that speaking has ended
+
 
     @sio.event
     def message(data):
@@ -28,18 +36,21 @@ def run_voice_assistant():
 
     wakeword_detection.daemon = True
     wakeword_detection.start()
-    
-    sio.emit('utterance', { 'utterance': "test" })
 
     while True:
         utterance = None
 
-        if wakeword_detection.wake_word_detected.is_set():
+        if wakeword_detection.wake_word_detected.is_set() and not speaking_event.is_set():
             utterance = speech_recognizer.recognize_speech()
             wakeword_detection.wake_word_detected.clear()
-            
+
         if utterance:
-            sio.emit('utterance', { 'utterance': utterance })
-       
+            sio.emit('utterance', {'utterance': utterance})
+            
+        if speaking_event.is_set():
+            wakeword_detection.wake_word_detected.clear()
+
+        time.sleep(1)
+
 if __name__ == "__main__":
     run_voice_assistant()
