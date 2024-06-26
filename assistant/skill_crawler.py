@@ -11,6 +11,7 @@ class SkillCrawler:
 
     def __init__(self, skill_package_path):
         self.skills = []
+        self.intents = []
         self.skills_dir = skill_package_path
         self.load_skills()
 
@@ -31,7 +32,7 @@ class SkillCrawler:
                     importlib.util.spec_from_file_location(f"{self.skills_dir}.{skill_dir}", init_file))
                 importlib.util.spec_from_file_location(f"{self.skills_dir}.{skill_dir}", init_file).loader.exec_module(skill_module)
                 self.append_skill(skill_module, intents_file)
-
+                
 
     def append_skill(self, skill_module, intents_file):
         with open(intents_file, 'r') as file:
@@ -39,10 +40,12 @@ class SkillCrawler:
             intents = intents_data.get('intents', [])
             skill_module.intents = intents
             for intent in intents:
+                self.intents.append(intent)
                 if intent["action"] == "fallback": 
                     self.fallback_skill = skill_module
     
         self.skills.append(skill_module)
+       
                 
 
     def find_intent_by_utterance(self, recognized_text):
@@ -81,6 +84,8 @@ class SkillCrawler:
                     return IntentRequest(skill, values, action)
         return IntentRequest(self.fallback_skill, values, "default")
 
+    def get_intents(self):
+        return self.intents
 
 if __name__ == "__main__":
     skill_package_path = "skills"

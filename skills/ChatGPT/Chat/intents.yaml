@@ -5,3 +5,4 @@ intents:
       - erzähle mir etwas über {thema}
       - was weißt du über {thema}
     action: chatgpt
+

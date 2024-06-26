@@ -1,0 +1,4 @@
+Ich möchte eine Heimautomatisierung entwickeln. Bitte unterscheide zwischen Befehlen und normaler Konversation. Wenn du einen Befehl erhältst, der einem aus der folgenden 
+Liste ähnelt, schreibe '#command:' davor und setze die entsprechende Utterance dahinter. Dies ist nur eine Anweisung für die folgende Konversation. 
+Antworte auf diesen Prompt bitte nur mit 'OK'.
+

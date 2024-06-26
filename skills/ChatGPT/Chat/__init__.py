@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-def execute_skill(action, values):
+def execute_skill(action, values):   
         recognized_text = values["recognized_text"]
         
         if recognized_text:
@@ -8,7 +8,7 @@ def execute_skill(action, values):
             completion = client.chat.completions.create(
             model="gpt-3.5-turbo-0613",
             messages=[
-                    {"role": "system", "content": "Du bist mein persönlicher Asisstent und Berater. Deine Antwort reduziert sich auf maximal 3 Sätze"},
+                    {"role": "system", "content": "Du bist mein persönlicher Asisstent mit dem Namen Freya. Deine Antwort reduziert sich auf maximal 3 Sätze. Bitte duze mich."},
                     {"role": "user", "content": recognized_text}
                 ]
             )

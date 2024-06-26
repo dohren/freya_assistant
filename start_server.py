@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
-from assistant import SkillCrawler, SkillWorker
+from assistant import SkillCrawler, SkillWorker, Chatgpt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'  # Replace with your secret key
@@ -8,8 +8,10 @@ socketio = SocketIO(app)
 
 skill_crawler = SkillCrawler("skills")
 skill_worker = SkillWorker()
+chatgpt = Chatgpt()
 
-initialized = False
+intents=skill_crawler.get_intents()
+instruction = chatgpt.get_chtgpt_intructions(intents)
 
 clients = {}
 
@@ -19,6 +21,8 @@ def index():
 
 @socketio.on('connect')
 def handle_connect():
+    
+    # skill_crawler.find_intent_by_action("chatgpt", { "recognized_text": instruction })
     user_info = request.args.get('username')
     clients[user_info] = request.sid
 
@@ -67,5 +71,21 @@ def handle_utterance(data):
         'response': response
     })
 
-if __name__ == '__main__':   
+@socketio.on('chatgpt')
+def handle_utterance(data):
+    if not data or 'utterance' not in data:
+        emit('error', {'error': 'Invalid utterance request'})
+        return
+
+    utterance = data['utterance'] 
+    values = { "recognized_text": utterance }
+    intent_request = skill_crawler.find_intent_by_action("chatgpt", values)
+    response = skill_worker.execute(intent_request)
+    emit('utterance_response', {
+        'status': 'success',
+        'message': f"Received utterance: '{utterance}'",
+        'response': response
+    })
+
+if __name__ == '__main__':
     socketio.run(app, debug=True)

@@ -45,7 +45,7 @@ def run_voice_assistant():
             wakeword_detection.wake_word_detected.clear()
 
         if utterance:
-            sio.emit('utterance', {'utterance': utterance})
+            sio.emit('chatgpt', {'utterance': utterance})
             
         if speaking_event.is_set():
             wakeword_detection.wake_word_detected.clear()
